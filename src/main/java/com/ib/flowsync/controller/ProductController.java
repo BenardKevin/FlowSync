@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin(origins = "http://localhost:4200/", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class ProductController {
 
     @Autowired
@@ -59,7 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public @ResponseBody void deleteProduct(
+    public void deleteProduct(
             @PathVariable(value = "productId") Integer productId
     ) {
         productService.deleteProduct(productId);

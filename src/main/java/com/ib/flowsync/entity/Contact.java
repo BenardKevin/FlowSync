@@ -16,7 +16,7 @@ public class Contact implements Serializable {
     private Integer id;
 
     private String name;
-    private String firstName;
+    private String firstname;
     private String address;
     private String email;
 

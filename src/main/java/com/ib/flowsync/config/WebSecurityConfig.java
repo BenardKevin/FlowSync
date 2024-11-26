@@ -11,9 +11,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain formLoginFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().requestMatchers("/").permitAll();
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeRequests(authorizeRequests ->
+                authorizeRequests.anyRequest() .permitAll()).csrf().disable().cors();
         return http.build();
     }
 }

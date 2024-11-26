@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/contacts")
+@CrossOrigin(origins = "http://localhost:4200/", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class ContactController {
 
     @Autowired
@@ -56,7 +57,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{contactId}")
-    public @ResponseBody void deleteContact(
+    public void deleteContact(
             @PathVariable(value = "contactId") Integer contactId
     ) {
         contactService.deleteContact(contactId);
