@@ -13,12 +13,12 @@ public class OrderLine implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-//    @ManyToOne
-//    private Integer orderId;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Order order;
 
+    @Column(nullable = false)
     private Integer quantity;
+
+    @ManyToOne(optional = false)
     private Product product;
 }

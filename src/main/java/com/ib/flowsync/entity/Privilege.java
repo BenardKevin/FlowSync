@@ -4,23 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Data
-public class Category implements Serializable {
+public class Privilege {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    @JsonIgnore
-    private Collection<Product> productList = new ArrayList<>();
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles = new ArrayList<>();
+
+    public Privilege() { }
+
+    public Privilege(String name) {
+        this.name = name;
+    }
 }

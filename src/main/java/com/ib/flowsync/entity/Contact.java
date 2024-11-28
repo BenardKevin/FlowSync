@@ -1,10 +1,12 @@
 package com.ib.flowsync.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -15,11 +17,20 @@ public class Contact implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String name;
+    @Column(nullable = false)
     private String firstname;
-    private String address;
-    private String email;
 
-    @OneToMany
-    private List<Order> orderList = new ArrayList<>();
+    @Column(nullable = false)
+    private String lastname;
+
+    private String email;
+    private String  phoneNumber;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
+
+    @OneToMany(mappedBy = "contact")
+    @JsonIgnore
+    private Collection<Order> orderList = new ArrayList<>();
 }

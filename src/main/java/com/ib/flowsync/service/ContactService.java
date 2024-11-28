@@ -26,8 +26,8 @@ public class ContactService {
         return contactRepository.findById(contactId).orElse(null);
     }
 
-    public Contact getContactByName(String name) {
-        return contactRepository.findByName(name).orElse(null);
+    public List<Contact> getContactByName(String firstname) {
+        return (List<Contact>) contactRepository.findByFirstname(firstname);
     }
 
     public void updateContact(Contact contact, Integer contactId) {
