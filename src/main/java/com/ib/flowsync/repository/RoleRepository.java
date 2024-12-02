@@ -1,6 +1,5 @@
 package com.ib.flowsync.repository;
 
-import com.ib.flowsync.entity.Contact;
 import com.ib.flowsync.entity.Role;
 import org.springframework.data.repository.CrudRepository;
 

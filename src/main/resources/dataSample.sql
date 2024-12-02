@@ -73,7 +73,7 @@ ALTER TABLE IF EXISTS public.supplier
 INSERT INTO public.supplier (id, company_name, address_id)
 VALUES
     (1, 'Carrefour', 1),
-    (2, 'Auchamps', 2),
+    (2, 'Auchan', 2),
     (3, 'Intermarché', 3);
 
 -- Table: public.product
