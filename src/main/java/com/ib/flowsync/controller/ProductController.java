@@ -1,5 +1,6 @@
 package com.ib.flowsync.controller;
 
+import com.ib.flowsync.dto.ProductDTO;
 import com.ib.flowsync.entity.Product;
 import com.ib.flowsync.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,8 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("")
-    public ResponseEntity<String> createProduct(
-            @RequestBody Product product
-    ) {
-        productService.createProduct(product);
+    public ResponseEntity<String> createProduct(@RequestBody ProductDTO productDTO) {
+        productService.createProduct(productDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -48,15 +47,12 @@ public class ProductController {
 
     @PutMapping("/{productId}")
     public ResponseEntity<String> updateProduct(
-            @PathVariable(value = "productId") Integer productId,
-            @RequestBody Product product
-    ) {
-        productService.updateProduct(product, productId);
-
+            @PathVariable Integer productId,
+            @RequestBody ProductDTO productDTO) {
+        productService.updateProduct(productDTO, productId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Product update was successful");
-
     }
 
     @DeleteMapping("/{productId}")
