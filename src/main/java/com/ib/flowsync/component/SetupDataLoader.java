@@ -14,10 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -33,7 +31,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private PrivilegeRepository privilegeRepository;
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     @Transactional
@@ -42,21 +40,23 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup)
             return;
 
+        Privilege createPrivilege = createPrivilegeIfNotFound("CREATE_PRIVILEGE");
         Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
+        Privilege updatePrivilege = createPrivilegeIfNotFound("UPDATE_PRIVILEGE");
+        Privilege deletePrivilege = createPrivilegeIfNotFound("DELETE_PRIVILEGE");
 
         List<Privilege> adminPrivileges = Arrays.asList(
-                readPrivilege, writePrivilege);
+                createPrivilege, readPrivilege, updatePrivilege, deletePrivilege);
         createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
         createRoleIfNotFound("ROLE_USER", List.of(readPrivilege));
 
         Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
         User user = new User();
-        user.setFirstName("admin");
-        user.setLastName("admin");
+        user.setFirstname("admin");
+        user.setLastname("admin");
         user.setPassword(passwordEncoder.encode("admin"));
         user.setEmail("admin@admin.com");
-        user.setRoles(List.of(adminRole));
+        user.setRoles(Set.of(adminRole));
         user.setEnabled(true);
         userRepository.save(user);
 
@@ -85,7 +85,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         if (optionalRole.isEmpty()) {
             Role role = role = new Role(name);
-            role.setPrivileges(privileges);
+            role.setPrivileges(privileges.stream().collect(Collectors.toSet()));
             roleRepository.save(role);
 
             return role;

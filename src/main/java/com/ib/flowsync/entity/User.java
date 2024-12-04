@@ -2,22 +2,26 @@ package com.ib.flowsync.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
 @Table(name="\"user\"")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String firstname;
 
     @Column(nullable = false)
-    private String lastName;
+    private String lastname;
 
     private String address;
 
@@ -33,12 +37,12 @@ public class User {
     @Lob
     private byte[] image;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 }
